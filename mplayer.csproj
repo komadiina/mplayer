@@ -1,0 +1,152 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UserSecretsId>f066d82c-e0ff-42cc-858f-df8cee07eae2</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="res\fonts\Font Awesome 6 Brands-Regular-400.otf" />
+    <None Remove="res\fonts\Font Awesome 6 Free-Regular-400.otf" />
+    <None Remove="res\fonts\Font Awesome 6 Free-Solid-900.otf" />
+    <None Remove="res\fonts\Inter_24pt-Black.ttf" />
+    <None Remove="res\fonts\Inter_24pt-BlackItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-Bold.ttf" />
+    <None Remove="res\fonts\Inter_24pt-BoldItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-ExtraBold.ttf" />
+    <None Remove="res\fonts\Inter_24pt-ExtraBoldItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-ExtraLight.ttf" />
+    <None Remove="res\fonts\Inter_24pt-ExtraLightItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-Italic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-Light.ttf" />
+    <None Remove="res\fonts\Inter_24pt-LightItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-Medium.ttf" />
+    <None Remove="res\fonts\Inter_24pt-MediumItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-Regular.ttf" />
+    <None Remove="res\fonts\Inter_24pt-SemiBold.ttf" />
+    <None Remove="res\fonts\Inter_24pt-SemiBoldItalic.ttf" />
+    <None Remove="res\fonts\Inter_24pt-Thin.ttf" />
+    <None Remove="res\fonts\Inter_24pt-ThinItalic.ttf" />
+    <None Remove="res\fonts\Lexend-Black.ttf" />
+    <None Remove="res\fonts\Lexend-Bold.ttf" />
+    <None Remove="res\fonts\Lexend-ExtraBold.ttf" />
+    <None Remove="res\fonts\Lexend-ExtraLight.ttf" />
+    <None Remove="res\fonts\Lexend-Light.ttf" />
+    <None Remove="res\fonts\Lexend-Medium.ttf" />
+    <None Remove="res\fonts\Lexend-Regular.ttf" />
+    <None Remove="res\fonts\Lexend-SemiBold.ttf" />
+    <None Remove="res\fonts\Lexend-Thin.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AdonisUI" Version="1.17.1" />
+    <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0-preview3" />
+    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="WPF-UI" Version="4.0.0-rc.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="res\fonts\Font Awesome 6 Brands-Regular-400.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Font Awesome 6 Free-Regular-400.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Font Awesome 6 Free-Solid-900.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Black.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-BlackItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-BoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-ExtraBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-ExtraBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-ExtraLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-ExtraLightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Italic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-LightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-MediumItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-SemiBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Inter_24pt-ThinItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-Black.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-ExtraBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-ExtraLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="res\fonts\Lexend-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="storage\" />
+  </ItemGroup>
+
+</Project>

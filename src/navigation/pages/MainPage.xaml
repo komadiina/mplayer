@@ -1,0 +1,95 @@
+﻿<Page x:Class="mplayer.src.navigation.pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:mplayer.src.navigation.pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="mPlayer"
+	  xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+	  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+	  xmlns:vm="clr-namespace:mplayer.src.vm;assembly="
+	  xmlns:components="clr-namespace:mplayer.src.components;assembly="
+	  xmlns:conv="clr-namespace:mplayer.src.vm.converters;assembly=">
+	<Page.DataContext>
+		<vm:MainPageViewModel/>
+	</Page.DataContext>
+
+	<Page.InputBindings>
+		<KeyBinding Command="{Binding Path=OpenFileCommand}" Key="O" Modifiers="Ctrl"/>
+		<KeyBinding Command="{Binding Path=OpenFolderCommand}" Key="K" Modifiers="Ctrl"/>
+	</Page.InputBindings>
+
+	<Page.Style>
+		<Style TargetType="Page" BasedOn="{StaticResource {x:Type Page}}"/>
+	</Page.Style>
+
+	<Page.Resources>
+		<conv:LongToMMSSConverter x:Key="LongToMMSSConverter"/>
+	</Page.Resources>
+
+	<DockPanel>
+		<DockPanel DockPanel.Dock="Top">
+			<components:ContextBar  DockPanel.Dock="Top"/>
+
+			<StackPanel Orientation="Vertical" Margin="10,5">
+				<!--<StackPanel Orientation="Horizontal">-->
+				<Label Content="Currently playing" Foreground="Gray"/>
+				<!--</StackPanel>-->
+
+				<TextBlock Text="{Binding Path=SongTitle}" FontWeight="Bold" FontSize="24"/>
+			</StackPanel>
+		</DockPanel>
+
+		<StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+			<DockPanel Margin="25,0">
+				<Label Content="{Binding Path=SeekTime, Converter={StaticResource LongToMMSSConverter}}" DockPanel.Dock="Left"/>
+				<Label Content="{Binding Path=Length, Converter={StaticResource LongToMMSSConverter}}" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+			</DockPanel>
+			<Slider x:Name="SongSeekSlider" IsMoveToPointEnabled="True" Width="750" 
+					Value="{Binding Path=SeekTime, Mode=OneWay}"
+					Minimum="0"
+					Maximum="{Binding Path=Length}"
+					TickPlacement="BottomRight" TickFrequency="10"
+					Thumb.DragCompleted="SongSeekSlider_DragCompleted"
+					/>
+
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<StackPanel Orientation="Horizontal" Margin="348,10,0,10" HorizontalAlignment="Left" Grid.Column="0" Grid.ColumnSpan="2">
+					<ui:Button x:Name="btnTogglePlayback" VerticalAlignment="Bottom" Margin="8" Click="TogglePlayback">
+						<Button.Content>
+							<fa:FontAwesome Icon="{Binding Path=TogglePlaybackIcon}"/>
+						</Button.Content>
+					</ui:Button>
+
+					<ui:Button x:Name="btnStop" VerticalAlignment="Bottom" Margin="8" Click="btnStop_Click">
+						<Button.Content>
+							<fa:FontAwesome Icon="Stop"/>
+						</Button.Content>
+					</ui:Button>
+				</StackPanel>
+
+				<StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+					<Label VerticalAlignment="Center">
+						<Label.Content>
+							<fa:FontAwesome Icon="VolumeDown" FontSize="20"/>
+						</Label.Content>
+					</Label>
+					<Slider x:Name="VolumeSlider" Grid.Column="1"
+							Thumb.DragCompleted="VolumeSlider_DragCompleted"
+						Margin="10,0,25,0"
+						HorizontalAlignment="Right" 
+						Width="100" 
+						Minimum="0" 
+						Maximum="100" 
+						Value="{Binding Path=Volume, Mode=TwoWay}"/>
+				</StackPanel>
+			</Grid>
+		</StackPanel>
+	</DockPanel>
+</Page>
