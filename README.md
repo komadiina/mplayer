@@ -1,6 +1,6 @@
 # mPlayer
 
-A simple music player application built with WPF, using third-party packages such as [WPF-UI]() (*for stylization*) and [NAudio]() (*for audio manipulation*). Implements features such as audio playback (`.mp3, .wav` formats), playback cancellation, volume slider, queuing all songs in a directory (basically playlists) and playlist serialization/deserialization. 
+A simple music player application built with WPF, using third-party packages such as [WPF-UI](https://wpfui.lepo.co) (*for stylization*) and [NAudio](https://github.com/naudio/NAudio) (*for audio manipulation*). Implements features such as audio playback (`.mp3, .wav` formats), playback cancellation, volume slider, queuing all songs in a directory (basically playlists) and playlist serialization/deserialization. 
 
 ### Visual examples
 ![](readme/home.png)
