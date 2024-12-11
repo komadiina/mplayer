@@ -146,6 +146,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="src\model\serializable\" />
     <Folder Include="storage\" />
   </ItemGroup>
 

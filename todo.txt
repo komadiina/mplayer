@@ -1,0 +1,3 @@
+- serialized playlist objects are empty (0b)
+- add visualizer
+- add quick access (recent playlists)

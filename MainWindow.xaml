@@ -10,10 +10,20 @@
 		xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
 		AllowsTransparency="True"
 		WindowStyle="None"
+		xmlns:vm="clr-namespace:mplayer.src.vm;assembly="
 		>
 	<Window.Style>
 		<Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
 	</Window.Style>
+
+	<Window.DataContext>
+		<vm:ContextBarViewModel/>
+	</Window.DataContext>
+
+	<Window.InputBindings>
+		<KeyBinding Command="{Binding Path=OpenFileCommand}" Key="O" Modifiers="Ctrl"/>
+		<KeyBinding Command="{Binding Path=OpenFolderCommand}" Key="K" Modifiers="Ctrl"/>
+	</Window.InputBindings>
 
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
