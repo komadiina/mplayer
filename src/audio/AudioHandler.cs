@@ -1,7 +1,9 @@
 ﻿using mplayer.src.model;
+using mplayer.src.vm;
 using mplayer.src.vm.events;
 using NAudio.Wave;
 using System.Diagnostics;
+using System.Windows;
 
 namespace mplayer.src.audio
 {
@@ -16,6 +18,7 @@ namespace mplayer.src.audio
 		private Boolean SongChange = false;
 		public event EventHandler<SongChangedEventArgs> SongChanged;
 		public event EventHandler<SeekTimeChangedEventArgs> SeekTimeChanged;
+		public static MainPageViewModel Context { get; set; }
 
 		private AudioHandler() { }
 
@@ -41,6 +44,12 @@ namespace mplayer.src.audio
 				OutputDevice = new WaveOutEvent();
 				OutputDevice.PlaybackStopped += OnPlaybackStopped;
 
+				Context.Playing = true;
+				Context.SongTitle = song.Title;
+				Context.SeekTime = 0;
+				Context.Length = (long)song.Data.TotalTime.TotalSeconds;
+				Context.ResetTimer();
+
 				OutputDevice.Init(CurrentSong.Data);
 				OnSongChanged(CurrentSong.Title, (long)CurrentSong.Data.TotalTime.TotalSeconds);
 			}
@@ -57,13 +66,26 @@ namespace mplayer.src.audio
 			OutputDevice = null;
 
 			CurrentSong?.Dispose();
-			CurrentSong = null;
 			CurrentSong = song;
+
+			if (song == null || song.Data == null)
+			{
+				Context.PlayNextVisibility = Visibility.Hidden;
+				Trace.WriteLine("No song to play.");
+				return;
+			}
 
 			OutputDevice = new WaveOutEvent();
 			OutputDevice.Init(CurrentSong.Data);
 			OutputDevice.PlaybackStopped += OnPlaybackStopped;
 			OutputDevice.Play();
+
+			Context.Playing = true;
+			Context.SongTitle = song.Title;
+			Context.SeekTime = 0;
+			Context.Length = (long)song.Data.TotalTime.TotalSeconds;
+			Context.TogglePlaybackIcon = FontAwesome.WPF.FontAwesomeIcon.Pause;
+			Context.ResetTimer();
 
 			SeekTimeChanged?.Invoke(this, new SeekTimeChangedEventArgs(0L));
 			SongChanged?.Invoke(this, new SongChangedEventArgs(CurrentSong.Title, (long)CurrentSong.Data.TotalTime.TotalSeconds));
@@ -82,7 +104,22 @@ namespace mplayer.src.audio
 			StopPlayback();
 			Playlist = playlist;
 			playlist.Save();
-			InitSong(playlist.First());
+			Song next = playlist.Next();
+			if (playlist.First() != null)
+			{
+				Song peeked = playlist.First();
+				Context.PlayNextVisibility = Visibility.Visible;
+				Context.HasNextSongInQueue = Visibility.Visible;
+				Context.NextSongTitle = "Next in queue: " + peeked.Title;
+			}
+			else
+			{
+				Context.PlayNextVisibility = Visibility.Hidden;
+				Context.HasNextSongInQueue = Visibility.Hidden;
+				Context.NextSongTitle = "";
+			}
+
+			InitSong(next);
 		}
 
 		public void Play()
@@ -132,6 +169,12 @@ namespace mplayer.src.audio
 			}
 		}
 
+		public long GetPosition()
+		{
+			if (CurrentSong == null || OutputDevice == null) return 0L;
+			return (long)CurrentSong.Data.CurrentTime.TotalSeconds;
+		}
+
 		private void OnPlaybackStopped(object sender, StoppedEventArgs e)
 		{
 			// stop playing current song
@@ -141,6 +184,11 @@ namespace mplayer.src.audio
 				CurrentSong.Dispose();
 				CurrentSong = null;
 			}
+			else
+			{
+				Context.SongTitle = "No songs are currently playing.";
+			}
+
 
 			// get next song from current playlist (if exists)
 			if (Playlist != null)
@@ -149,6 +197,26 @@ namespace mplayer.src.audio
 				if (nextSong != null)
 				{
 					PlayNext(nextSong);
+
+					if (Playlist.First() != null)
+					{
+						Song peeked = Playlist.First();
+						Context.PlayNextVisibility = Visibility.Visible;
+						Context.HasNextSongInQueue = Visibility.Visible;
+						Context.NextSongTitle = "Next in queue: " + peeked.Title;
+					}
+					else
+					{
+						Context.PlayNextVisibility = Visibility.Hidden;
+						Context.HasNextSongInQueue = Visibility.Visible;
+						Context.NextSongTitle = "No songs left in queue.";
+					}
+				}
+				else
+				{
+					Context.PlayNextVisibility = Visibility.Hidden;
+					Context.HasNextSongInQueue = Visibility.Hidden;
+					Context.NextSongTitle = "";
 				}
 			}
 
@@ -157,6 +225,12 @@ namespace mplayer.src.audio
 			{
 				OutputDevice.Dispose();
 				OutputDevice = null;
+
+				Context.Playing = false;
+				Context.SongTitle = "No songs are currently playing.";
+				Context.SeekTime = 0;
+				Context.Length = 0;
+				Context.TogglePlaybackIcon = FontAwesome.WPF.FontAwesomeIcon.Play;
 			}
 		}
 
@@ -169,6 +243,11 @@ namespace mplayer.src.audio
 		private void OnSeekTimeChanged(long time)
 		{
 			SeekTimeChanged?.Invoke(this, new SeekTimeChangedEventArgs(time));
+		}
+
+		public void Debug()
+		{
+
 		}
 	}
 }

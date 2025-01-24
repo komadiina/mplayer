@@ -3,7 +3,6 @@ using mplayer.src.audio;
 using mplayer.src.vm;
 using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace mplayer.src.navigation.pages
 {
@@ -13,33 +12,22 @@ namespace mplayer.src.navigation.pages
 	public partial class MainPage : Page
 	{
 		private Boolean Playing = false;
-		private readonly DispatcherTimer _sliderTimer;
 		private long _currentTime = 0L;
-		private MainPageViewModel _vm;
 
 		public MainPage()
 		{
 			InitializeComponent();
+			this.DataContext = new MainPageViewModel();
+			AudioHandler.Context = this.DataContext as MainPageViewModel;
 
-			_sliderTimer = new DispatcherTimer(DispatcherPriority.Normal)
-			{
-				Interval = TimeSpan.FromSeconds(1)
-			};
-			_sliderTimer.Tick += SliderTimer_Tick;
-			_vm = (this.DataContext as MainPageViewModel);
-		}
-
-		private void SliderTimer_Tick(object sender, EventArgs e)
-		{
-			if (_vm.Playing)
-			{
-				SongSeekSlider.Value += 1f;
-				_vm.SeekTime = (long)SongSeekSlider.Value;
-			}
+			var _vm = (MainPageViewModel)this.DataContext;
+			_vm.InitTimer();
+			_vm.StartTimer();
 		}
 
 		private void TogglePlayback(object sender, System.Windows.RoutedEventArgs e)
 		{
+			var _vm = (MainPageViewModel)this.DataContext;
 			if (_vm.Playing == false)
 			{
 				if (AudioHandler.Instance.IsInitialized == false)
@@ -49,7 +37,7 @@ namespace mplayer.src.navigation.pages
 				_vm.TogglePlaybackIcon = FontAwesomeIcon.Pause;
 
 				_vm.Playing = true;
-				_sliderTimer?.Start();
+				_vm._sliderTimer?.Start();
 			}
 			else
 			{
@@ -59,27 +47,30 @@ namespace mplayer.src.navigation.pages
 			}
 		}
 
-		private void btnStop_Click(object sender, System.Windows.RoutedEventArgs e)
+		public void Slider_DragStarted(object sender, EventArgs e)
 		{
-			AudioHandler.Instance.StopPlayback();
-			Playing = false;
-			_sliderTimer?.Stop();
-			SongSeekSlider.Value = 0;
-			_vm.TogglePlaybackIcon = FontAwesomeIcon.Play;
-		}
-		private void SongSeekSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-		{
-			try
-			{
-				AudioHandler.Instance.SetPosition(SongSeekSlider.Value);
-			}
-			catch (Exception ex)
-			{
-				Trace.WriteLine($"Unable to set position: {ex.Message}");
-			}
+			var ViewModel = (MainPageViewModel)this.DataContext;
+			ViewModel.SliderChangedBySystem = false;
 		}
 
-		private void VolumeSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+		public void Slider_DragCompleted(object sender, EventArgs e)
+		{
+			// Handle user-initiated seek
+			var newPosition = ((Slider)sender).Value;
+			AudioHandler.Instance.SetPosition(newPosition);
+		}
+
+		private void btnStop_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			var _vm = (MainPageViewModel)this.DataContext;
+			AudioHandler.Instance.StopPlayback();
+			Playing = false;
+			_vm._sliderTimer?.Stop();
+			SongDurationSlider.Value = 0;
+			_vm.TogglePlaybackIcon = FontAwesomeIcon.Play;
+		}
+
+		private void VolumeSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
 		{
 			try
 			{
@@ -89,6 +80,37 @@ namespace mplayer.src.navigation.pages
 			{
 				Trace.WriteLine($"Unable to set volume: {ex.Message}");
 			}
+		}
+
+		private void SongDurationSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+		{
+			var _vm = (MainPageViewModel)this.DataContext;
+
+			var s = sender as Slider;
+			Trace.WriteLine($"{s}");
+			if (s.IsFocused)
+			{
+				_vm.SliderChangedBySystem = false;
+				s.MoveFocus(new System.Windows.Input.TraversalRequest(System.Windows.Input.FocusNavigationDirection.Next));
+			}
+
+			if (_vm.SliderChangedBySystem)
+				return;
+
+			try
+			{
+				AudioHandler.Instance.SetPosition((float)SongDurationSlider.Value);
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine($"Unable to set position: {ex.Message}");
+			}
+		}
+
+		private void ButtonDebug_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			//var _vm = this.DataContext as MainPageViewModel;
+			AudioHandler.Instance.Debug();
 		}
 	}
 }

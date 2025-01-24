@@ -45,8 +45,7 @@ namespace mplayer.src.model
 
 			Trace.WriteLine($"Playing: ${First().Title}");
 
-			Songs.Dequeue();
-			return First();
+			return Songs.Dequeue();
 		}
 
 		public Boolean HasNext() { return Songs.Count > 0; }
@@ -80,6 +79,11 @@ namespace mplayer.src.model
 
 			textReader.Close();
 			return playlist;
+		}
+
+		public Song PeekNext()
+		{
+			return Songs.Count == 0 ? null : Songs.Peek();
 		}
 	}
 }
